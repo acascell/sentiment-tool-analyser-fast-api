@@ -1,16 +1,23 @@
-from sqlalchemy import Column, Integer, Sequence, Date, Text, ForeignKey
-from sqlalchemy.orm import relationship
+import ormar
+from datetime import date
 
-from src.app.models.base import Base
+import sqlalchemy
+
+from src.app.core.base import BaseMeta
+from src.app.core.config import settings
+from src.app.models.user import User
 
 
-class Mood(Base):
-    __table__ = "moods"
+class Mood(ormar.Model):
+    class Meta(BaseMeta):
+        tablename = "moods"
 
-    id = Column(Integer, Sequence("mood_id_seq"), primary_key=True)
-    date = Column(Date, nullable=False)
-    mood_value = Column(Integer, nullable=False)
-    note = Column(Text)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    id: int = ormar.Integer(primary_key=True, autoincrement=True)
+    date: date = ormar.Date(nullable=False)
+    mood_value: int = ormar.Integer(nullable=False)
+    note: str = ormar.Text()
+    user_id: int = ormar.ForeignKey(User, related_name="moods")
 
-    user = relationship("User", back_populates="moods")
+
+engine = sqlalchemy.create_engine(settings.db_url)
+Mood.Meta.table.create(engine)
