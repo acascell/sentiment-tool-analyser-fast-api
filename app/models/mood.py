@@ -3,9 +3,9 @@ from datetime import date
 
 import sqlalchemy
 
-from src.app.core.base import BaseMeta
-from src.app.core.config import settings
-from src.app.models.user import User
+from app.core.base import BaseMeta
+from app.core.config import settings
+from app.models.user import User
 
 
 class Mood(ormar.Model):
@@ -20,4 +20,5 @@ class Mood(ormar.Model):
 
 
 engine = sqlalchemy.create_engine(settings.db_url)
-Mood.Meta.table.create(engine)
+if not engine.dialect.has_table(engine.connect(), "moods"):
+    Mood.Meta.table.create(engine)
