@@ -1,8 +1,8 @@
 import ormar
 import sqlalchemy
 
-from src.app.core.base import BaseMeta
-from src.app.core.config import settings
+from app.core.base import BaseMeta
+from app.core.config import settings
 
 
 class User(ormar.Model):
@@ -16,4 +16,5 @@ class User(ormar.Model):
 
 
 engine = sqlalchemy.create_engine(settings.db_url)
-User.Meta.table.create(engine)
+if not engine.dialect.has_table(engine.connect(), "users"):
+    User.Meta.table.create(engine)

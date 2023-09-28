@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from src.app.models import User
-from src.app.core.base import database
+from app.models import User
+from app.core.base import database
 
 app = FastAPI(title="Sentiment tool analyser.")
 
